@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  details: MyText
+  time: 1
+  video_id: MyString
+  calories: 1
+
+two:
+  name: MyString
+  details: MyText
+  time: 1
+  video_id: MyString
+  calories: 1
