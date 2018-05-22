@@ -1,0 +1,69 @@
+module Api::V1
+    class UsersController < ApplicationController
+      before_action :set_user, only: [:show, :update, :destroy, :trainings]
+
+      # GET /users
+      def index
+        @users = User.all
+
+        render json: @users
+      end
+
+      # GET /users/1
+      def show
+        render json: @user
+      end
+
+      # GET /users/:id/trainings
+      # Will return the trainings started
+      def trainings
+        render json: @user.trainings
+      end
+
+      # POST /users
+      def create
+        @user = User.new(user_params)
+
+        if @user.save
+          render json: @user, status: :created
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PATCH/PUT /users/1
+      def update
+        if @user.update(user_params)
+          render json: @user
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
+      # POST /login (email, password)
+      def login
+        @user = User.where(login_params).first
+
+        if @user and @user.email == params[:user][:email] and @user.password == params[:user][:password]
+            render json: @user
+        else
+            render json: { error: true, message: 'Invalid user credentials' }, status: :unauthorized
+        end
+      end
+
+      private
+        # Use callbacks to share common setup or constraints between actions.
+        def set_user
+          @user = User.find(params[:id])
+        end
+
+        # Only allow a trusted parameter "white list" through.
+        def user_params
+          params.require(:user).permit(:name, :email, :password)
+        end
+
+        def login_params
+          params.require(:user).permit(:email, :password)
+        end
+    end
+end
